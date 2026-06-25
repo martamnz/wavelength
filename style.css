@@ -1,0 +1,555 @@
+:root {
+    --bg-color: #0d1b2a;
+    --card-bg: rgba(255, 255, 255, 0.05);
+    --primary: #4cc9f0;
+    --secondary: #f72585;
+    --accent: #4361ee;
+    --text-main: #ffffff;
+    --text-muted: #a0a0d0;
+    --dial-bg: #e0e0e0;
+    --wedge-color: #f72585;
+    --screen-color: #3a0ca3;
+    --pointer-color: #f72585;
+
+    --font-main: 'Outfit', sans-serif;
+    --ease-elastic: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+}
+
+body {
+    font-family: var(--font-main);
+    background: radial-gradient(circle at top center, #1b263b 0%, #0d1b2a 100%);
+    color: var(--text-main);
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#game-container {
+    width: 100%;
+    height: 100%;
+    max-width: 600px;
+    position: relative;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    opacity: 0;
+    pointer-events: none;
+    padding: 2rem 1rem;
+    transition: opacity 0.5s ease;
+}
+
+.screen.active {
+    opacity: 1;
+    pointer-events: all;
+    z-index: 10;
+}
+
+h1.title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-align: center;
+    margin-bottom: 0.5rem;
+    filter: drop-shadow(0 0 10px rgba(76, 201, 240, 0.5));
+}
+
+p.subtitle {
+    text-align: center;
+    color: var(--text-muted);
+    font-weight: 300;
+    letter-spacing: 1px;
+    margin-bottom: 3rem;
+}
+
+#start-screen {
+    justify-content: center;
+    align-items: center;
+}
+
+.top-bar {
+    width: 100%;
+    margin-bottom: 2rem;
+}
+
+/* Team Setup */
+.team-setup {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    width: 100%;
+}
+
+.team-setup input {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    color: white;
+    /* Ensure text is visible */
+    text-align: center;
+}
+
+/* Scoreboard */
+.scoreboard {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    background: var(--card-bg);
+    padding: 10px 30px;
+    border-radius: 50px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 100;
+    transition: all 0.5s ease;
+}
+
+.scoreboard.hidden {
+    transform: translate(-50%, -100px);
+    opacity: 0;
+}
+
+.team-score {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    opacity: 0.5;
+    transition: all 0.3s ease;
+}
+
+.team-score.active {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.team-name {
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+.team-score.active .team-name {
+    color: var(--primary);
+    text-shadow: 0 0 10px rgba(76, 201, 240, 0.5);
+}
+
+.score-number {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: white;
+}
+
+.turn-indicator {
+    font-weight: 800;
+    color: var(--text-muted);
+    opacity: 0.3;
+}
+
+/* Topic Interaction (Inputs) */
+.topic-interaction {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--card-bg);
+    padding: 1rem 1.5rem;
+    border-radius: 50px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    height: 80px;
+    /* Force height */
+}
+
+.topic-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: white;
+    font-family: var(--font-main);
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    text-align: center;
+    padding: 5px;
+    transition: all 0.3s ease;
+}
+
+.topic-input:focus {
+    outline: none;
+    border-bottom-color: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+}
+
+.topic-input.left {
+    color: var(--primary);
+    text-align: left;
+}
+
+.topic-input.right {
+    color: var(--secondary);
+    text-align: right;
+}
+
+.topic-display {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--card-bg);
+    padding: 1rem 1.5rem;
+    border-radius: 50px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    height: 80px;
+    /* Force height */
+}
+
+.topic-display span {
+    flex: 1;
+    text-align: center;
+    font-weight: 600;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+}
+
+#topic-left-p,
+#topic-left-g,
+#topic-left-r {
+    color: var(--primary);
+    text-align: left;
+}
+
+#topic-right-p,
+#topic-right-g,
+#topic-right-r {
+    color: var(--secondary);
+    text-align: right;
+}
+
+.spectrum-line {
+    flex: 1;
+    height: 4px;
+    background: linear-gradient(to right, var(--primary), var(--secondary));
+    margin: 0 15px;
+    border-radius: 2px;
+}
+
+.center-stage {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    padding-top: 60px;
+    /* Space for scoreboard */
+}
+
+.bottom-bar {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding-bottom: 2rem;
+}
+
+/* Dial Components */
+.dial-container {
+    width: 300px;
+    height: 150px;
+    position: relative;
+    /* overflow: hidden; Removed to allow pointer shadow etc */
+}
+
+/* Semi-circle background */
+.dial-background {
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background: #e0e0e0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    clip-path: polygon(0 0, 100% 0, 100% 50%, 0 50%);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+}
+
+/* 
+   ZONE CONFIGURATION VS CODE
+   To change zone sizes, adjust the degrees below.
+   Each zone is centered on 'from 346deg'.
+   
+   Current Layout (28deg total):
+   - Center (5pt): 4deg wide
+   - Pink (3pt): 4deg wide (each side)
+   - Purple (2pt): 4deg wide (each side)
+   - Blue (1pt): 4deg wide (each side)
+*/
+:root {
+    --zone-5: #e0aa3e;
+    /* Gold */
+    --zone-3: #f72585;
+    /* Pink */
+    --zone-2: #7209b7;
+    /* Purple */
+    --zone-1: #3a0ca3;
+    /* Dark Blue */
+}
+
+.target-wedge {
+    width: 300px;
+    height: 300px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 50%;
+    clip-path: polygon(0 0, 100% 0, 100% 50%, 0 50%);
+    /* 
+       Updated Layout (42deg total):
+       - Center (5pt): 6deg wide
+       - Pink (3pt): 6deg wide (each side)
+       - Purple (2pt): 6deg wide (each side)
+       - Blue (1pt): 6deg wide (each side)
+       Start: 360 - 21 = 339deg
+    */
+    background: conic-gradient(from 339deg,
+            var(--zone-1) 0deg, var(--zone-1) 6deg,
+            /* 1pt */
+            var(--zone-2) 6deg, var(--zone-2) 12deg,
+            /* 2pt */
+            var(--zone-3) 12deg, var(--zone-3) 18deg,
+            /* 3pt */
+            var(--zone-5) 18deg, var(--zone-5) 24deg,
+            /* 5pt (Center) */
+            var(--zone-3) 24deg, var(--zone-3) 30deg,
+            /* 3pt */
+            var(--zone-2) 30deg, var(--zone-2) 36deg,
+            /* 2pt */
+            var(--zone-1) 36deg, var(--zone-1) 42deg,
+            /* 1pt */
+            transparent 42deg);
+    transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+    z-index: 1;
+}
+
+.target-wedge.hidden {
+    opacity: 0;
+}
+
+/* Screen Cover */
+.screen-cover {
+    width: 300px;
+    height: 300px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: var(--screen-color);
+    border-radius: 50%;
+    clip-path: polygon(0 0, 100% 0, 100% 50%, 0 50%);
+    z-index: 2;
+    transform-origin: center center;
+    transition: transform 0.8s var(--ease-elastic), opacity 0.5s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.screen-cover::after {
+    content: '?';
+    font-size: 5rem;
+    color: rgba(255, 255, 255, 0.2);
+    font-weight: 800;
+    margin-bottom: 50%;
+}
+
+.screen-cover.open {
+    transform: scale(0);
+    opacity: 0;
+}
+
+.screen-cover.closed {
+    transform: scale(1);
+    opacity: 1;
+}
+
+/* Pointer */
+.dial-pointer {
+    width: 300px;
+    height: 300px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 3;
+    pointer-events: none;
+    transition: transform 0.1s linear;
+}
+
+.pointer-hand {
+    width: 4px;
+    height: 160px;
+    background: #fff;
+    border-radius: 2px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    position: absolute;
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%);
+    transform-origin: bottom center;
+    /* Actually we rely on .dial-pointer rotation. 
+       This line is just drawn relative to that.
+    */
+}
+
+.pointer-hand::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    width: 20px;
+    height: 20px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--secondary);
+}
+
+.dial-container.interactive {
+    cursor: grab;
+}
+
+.dial-container.interactive:active {
+    cursor: grabbing;
+}
+
+input[type="text"] {
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+    width: 100%;
+    max-width: 300px;
+    padding: 10px;
+    font-family: var(--font-main);
+    font-size: 1.5rem;
+    color: white;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+input[type="text"]:focus {
+    outline: none;
+    border-bottom-color: var(--primary);
+}
+
+.btn {
+    padding: 15px 40px;
+    border: none;
+    border-radius: 50px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    font-family: var(--font-main);
+}
+
+.primary-btn {
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+    color: white;
+    box-shadow: 0 5px 20px rgba(67, 97, 238, 0.4);
+}
+
+.primary-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(67, 97, 238, 0.6);
+}
+
+.secondary-btn {
+    background: transparent;
+    border: 2px solid var(--primary);
+    color: var(--primary);
+}
+
+.secondary-btn:hover {
+    background: rgba(76, 201, 240, 0.1);
+}
+
+.clue-display {
+    text-align: center;
+}
+
+.clue-label {
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+}
+
+#clue-text,
+#clue-text-result {
+    font-size: 2.5rem;
+    color: white;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+}
+
+.score-display {
+    text-align: center;
+    background: var(--card-bg);
+    padding: 20px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    opacity: 0;
+    transform: scale(0.8);
+    animation-delay: 0.5s;
+    animation-fill-mode: forwards;
+}
+
+#score-value {
+    font-size: 4rem;
+    font-weight: 800;
+    line-height: 1;
+    background: linear-gradient(to bottom, #fff, #aaa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+#score-message {
+    color: var(--primary);
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+@keyframes popIn {
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}

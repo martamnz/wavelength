@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wavelength</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div id="game-container">
+
+        <!-- Start Screen -->
+        <div id="start-screen" class="screen active">
+            <h1 class="title">WAVELENGTH</h1>
+            <p class="subtitle">A SOCIAL GUESSING GAME</p>
+
+            <div class="team-setup">
+                <input type="text" id="team1-input" placeholder="Team 1 Name" value="Team 1">
+                <input type="text" id="team2-input" placeholder="Team 2 Name" value="Team 2">
+            </div>
+
+            <button id="start-btn" class="btn primary-btn">New Game</button>
+        </div>
+
+        <!-- Persistent Scoreboard -->
+        <div id="scoreboard" class="scoreboard hidden">
+            <div class="team-score" id="team1-score-display">
+                <span class="team-name" id="team1-name">Team 1</span>
+                <span class="score-number" id="team1-score">0</span>
+            </div>
+            <div class="turn-indicator">VS</div>
+            <div class="team-score" id="team2-score-display">
+                <span class="team-name" id="team2-name">Team 2</span>
+                <span class="score-number" id="team2-score">0</span>
+            </div>
+        </div>
+
+        <!-- Psychic Phase -->
+        <div id="psychic-phase" class="screen">
+            <div class="top-bar">
+                <div class="topic-interaction">
+                    <input type="text" id="topic-left-input" placeholder="Left Concept" class="topic-input left"
+                        autocomplete="off">
+                    <div class="spectrum-line"></div>
+                    <input type="text" id="topic-right-input" placeholder="Right Concept" class="topic-input right"
+                        autocomplete="off">
+                </div>
+            </div>
+
+            <div class="center-stage">
+                <!-- <div class="psychic-instruction">
+                    <h2>You are the Psychic</h2>
+                    <p>Set two concepts and guide your team to the target.</p>
+                </div> -->
+
+                <div class="dial-container">
+                    <div class="dial-background"></div>
+                    <div class="target-wedge" id="target-wedge"></div>
+                    <div class="screen-cover open"></div> <!-- Permanently open for psychic -->
+                </div>
+
+                <!-- Clue input removed as requested -->
+            </div>
+
+            <div class="bottom-bar">
+                <button id="ready-btn" class="btn primary-btn">Ready</button>
+            </div>
+        </div>
+
+        <!-- Guessing Phase -->
+        <div id="guessing-phase" class="screen">
+            <div class="top-bar">
+                <div class="topic-display">
+                    <span id="topic-left-g">Left</span>
+                    <div class="spectrum-line"></div>
+                    <span id="topic-right-g">Right</span>
+                </div>
+            </div>
+
+            <div class="center-stage">
+                <!-- Clue display removed -->
+
+                <div class="dial-container interactive" id="dial-interaction-zone">
+                    <div class="dial-background"></div>
+                    <!-- Target is hidden by screen-cover -->
+                    <div class="target-wedge hidden" id="target-wedge-hidden"></div>
+                    <div class="screen-cover closed" id="screen-cover"></div>
+                    <div class="dial-pointer" id="dial-pointer">
+                        <div class="pointer-hand"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bottom-bar">
+                <button id="lock-in-btn" class="btn primary-btn">Lock In</button>
+            </div>
+        </div>
+
+        <!-- Result Phase -->
+        <div id="result-phase" class="screen">
+            <div class="top-bar">
+                <div class="topic-display">
+                    <span id="topic-left-r">Left</span>
+                    <div class="spectrum-line"></div>
+                    <span id="topic-right-r">Right</span>
+                </div>
+            </div>
+
+            <div class="center-stage">
+                <!-- Clue display removed -->
+
+                <div class="dial-container">
+                    <div class="dial-background"></div>
+                    <div class="target-wedge" id="target-wedge-result"></div>
+                    <div class="screen-cover open" id="screen-cover-result"></div> <!-- Animated to open -->
+                    <div class="dial-pointer" id="dial-pointer-result">
+                        <div class="pointer-hand"></div>
+                    </div>
+                </div>
+
+                <div class="score-display">
+                    <h1 id="score-value">0</h1>
+                    <p id="score-message">Points</p>
+                </div>
+            </div>
+
+            <div class="bottom-bar">
+                <button id="next-round-btn" class="btn secondary-btn">Next Round</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="topics.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>
